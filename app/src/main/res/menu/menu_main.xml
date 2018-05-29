@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+tools:context="examenreyna03.android.examen03lastversion.ActivitiesViews.InsertarDatosActivity">
+<item
+    android:id="@+id/check"
+    android:icon="@drawable/ic_check"
+    android:title="item1"
+    app:showAsAction="ifRoom" />
+</menu>

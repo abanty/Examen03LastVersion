@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Gestion de Contactos</string>
+    <string name="tab_text_1">Telefono</string>
+    <string name="tab_text_2">Contactos</string>
+    <string name="tab_text_3">Favoritos</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="Nombre">Nombres</string>
+    <string name="Numero">N° Telefonico</string>
+    <string name="tituloR">Nuevo Contacto</string>
+</resources>

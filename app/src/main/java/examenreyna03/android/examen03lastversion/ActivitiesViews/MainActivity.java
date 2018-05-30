@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,11 +21,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import examenreyna03.android.examen03lastversion.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private FloatingActionButton add;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -68,6 +73,43 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setElevation(0);
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu2_main, menu);
+        MenuItem item = menu.findItem(R.id.buscador);
+        SearchView searchView = (SearchView) item.getActionView();
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        try{
+
+        }catch (Exception e){
+
+        }
+
+        return false;
+    }
+
+
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        if(id == R.id.buscador){
+//            Toast.makeText(this, "AQUI INICIA LA BUSQUEDA", Toast.LENGTH_SHORT).show();
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
+
 
 
 

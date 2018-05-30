@@ -17,10 +17,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +52,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class TabContactos extends Fragment {
 
-    ImageView imgcall;
+
     private TextView call;
 
     private ListView Milista;
@@ -57,6 +60,7 @@ public class TabContactos extends Fragment {
     AdaptadorListView MiAdaptador = null;
     ImageView imagenfoto;
     public DBHelper SQLiteDB;
+    protected View mView;
 
 
     @Override
@@ -65,24 +69,15 @@ public class TabContactos extends Fragment {
         View rootcontactview = inflater.inflate(R.layout.tab2_contactos, container, false);
 
         Milista = (ListView) rootcontactview.findViewById(R.id.tablistacontac);
-
-        call = (TextView) rootcontactview.findViewById(R.id.txtcelular);
-        imgcall =(ImageView) rootcontactview.findViewById(R.id.imgllamar);
-
-        imgcall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Hola", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-
+        call =(TextView) rootcontactview.findViewById(R.id.getdatacell);
         ContactList = new ArrayList<>();
         MiAdaptador = new AdaptadorListView(getActivity(),R.layout.item_contacto, ContactList);
         Milista.setAdapter(MiAdaptador);
 
-        SQLiteDB = new DBHelper(getActivity().getApplicationContext(), "DBCONTACTO.sqlite", null, 1);
+        call.setText("991611444");
+
+
+        SQLiteDB = new DBHelper(getActivity(), "DBCONTACTO.sqlite", null, 1);
         SQLiteDB.queryData("CREATE TABLE IF NOT EXISTS CONTACTO(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre VARCHAR, telefono VARCHAR, foto BLOB)");
 
         Cursor cursor = SQLiteDB.getData("SELECT * FROM CONTACTO");
@@ -107,7 +102,7 @@ public class TabContactos extends Fragment {
 
                 final CharSequence[] items = {"Hacer Llamada","Modificar","Eliminar","Favoritos"};
 
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder dialog = new AlertDialog.Builder(view.getContext());
 
                 dialog.setTitle("Elige una Opcion");
                 dialog.setIcon(R.drawable.ic_dialog);
@@ -116,7 +111,15 @@ public class TabContactos extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (i == 0){
-                            Toast.makeText(getActivity(), "Espera unos segundos para la llamada", Toast.LENGTH_SHORT).show();
+                            String cel = call.getText().toString();
+//                            Toast.makeText(getActivity(), "El numero es" + cel, Toast.LENGTH_SHORT).show();
+                            Uri uri = Uri.parse("tel:" + cel);
+                            Intent icall = new Intent(Intent.ACTION_CALL, uri);
+                            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                return;
+                            }
+                            startActivity(icall);
+
                         }
 
                         if (i == 1){
@@ -126,6 +129,8 @@ public class TabContactos extends Fragment {
                                 arrID.add(c.getInt(0));
                             }
                             showDialogUpdate(getActivity(),arrID.get(position));
+
+
                         }
                         if (i==2){
                             Cursor c = InsertarDatosActivity.SQLiteDB.getData("SELECT id FROM CONTACTO");
@@ -160,7 +165,8 @@ public class TabContactos extends Fragment {
 
     private void showDialogDelete(final int idRecord) {
         AlertDialog.Builder dialogDelete = new AlertDialog.Builder(getActivity());
-        dialogDelete.setTitle("Cuidado!!");
+        dialogDelete.setTitle("Atencion!");
+        dialogDelete.setIcon(R.drawable.ic_deletecontact);
         dialogDelete.setMessage("Estas seguro de eliminar?");
         dialogDelete.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -186,7 +192,7 @@ public class TabContactos extends Fragment {
 
 
     private void showDialogUpdate(Activity activity, final int position){
-        final Dialog dialog = new Dialog(activity);
+        final Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.contacto_dialog);
         dialog.setTitle("Modificar");
 
@@ -224,8 +230,7 @@ public class TabContactos extends Fragment {
             @Override
             public void onClick(View view) {
                 //check external storage permission
-                ActivityCompat.requestPermissions(
-                        getActivity(),
+                requestPermissions(
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         888
                 );
@@ -283,7 +288,6 @@ public class TabContactos extends Fragment {
 //            Toast.makeText(this, "Permisos Denegados", Toast.LENGTH_SHORT).show();
 //        }
 
-
         if (requestCode == 888){
             if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 //gallery intent
@@ -306,8 +310,12 @@ public class TabContactos extends Fragment {
             Uri imageUri = data.getData();
             CropImage.activity(imageUri)
                     .setGuidelines(CropImageView.Guidelines.ON) //enable image guidlines
-                    .setAspectRatio(1,1)// image will be square
+                    .setAspectRatio(7,7)// image will be square
                     .start(getActivity());
+
+
+
+
         }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
             CropImage.ActivityResult result =CropImage.getActivityResult(data);

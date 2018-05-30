@@ -121,6 +121,10 @@ public class InsertarDatosActivity extends AppCompatActivity {
             }
             return true;
         }
+        if(id == R.id.buscador){
+            Toast.makeText(this, "AQUI INICIA LA BUSQUEDA", Toast.LENGTH_SHORT).show();
+
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -136,9 +140,6 @@ public class InsertarDatosActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-
-
 
         if (requestCode == REQUEST_CODE_GALLERY){
             if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){

@@ -77,7 +77,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     public Cursor getData(String sql){
-        SQLiteDatabase database = getReadableDatabase();
+        SQLiteDatabase database = getWritableDatabase();
         return database.rawQuery(sql, null);
     }
 

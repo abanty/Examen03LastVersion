@@ -3,6 +3,7 @@ package examenreyna03.android.examen03lastversion.ActivitiesViews;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -44,8 +46,9 @@ public class AgendaActivity extends AppCompatActivity {
     private ListView Milista;
     private ArrayList<Contacto> ContactList;
     AdaptadorListView MiAdaptador = null;
-    ImageView imagenfoto;
+    ImageView imagenfoto,xd;
     public DBHelper SQLiteDB;
+    TextView txtcall;
 
 
 
@@ -61,11 +64,14 @@ public class AgendaActivity extends AppCompatActivity {
 
 
 
+        LayoutInflater Inflater = getLayoutInflater();
+        View view = Inflater.inflate(R.layout.item_contacto, null, false);
 
         Milista = (ListView) findViewById(R.id.listView);
         ContactList = new ArrayList<>();
         MiAdaptador = new AdaptadorListView(this,R.layout.item_contacto, ContactList);
 
+        ;
         Milista.setAdapter(MiAdaptador);
 
         SQLiteDB = new DBHelper(this, "DBCONTACTO.sqlite", null, 1);
@@ -104,7 +110,9 @@ public class AgendaActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (i == 0){
-                            Toast.makeText(getApplicationContext(), "Espera unos segundos para la llamada", Toast.LENGTH_SHORT).show();
+                            String cel = txtcall.getText().toString();
+//                            String cel= getIntent().getStringExtra("TextBox");
+                            Toast.makeText(getApplicationContext(), "El numero es: " + cel, Toast.LENGTH_SHORT).show();
                         }
 
                         if (i == 1){
@@ -134,6 +142,7 @@ public class AgendaActivity extends AppCompatActivity {
         });
 
     }
+
 
     private void SetupActionBar(){
         ActionBar actionBar = getSupportActionBar();
@@ -209,10 +218,7 @@ public class AgendaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //check external storage permission
-                ActivityCompat.requestPermissions(
-                        AgendaActivity.this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        888
+                ActivityCompat.requestPermissions(AgendaActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},888
                 );
             }
         });
